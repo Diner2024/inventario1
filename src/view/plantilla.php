@@ -25,7 +25,7 @@ if (isset($_SESSION['sesion_id']) && isset($_SESSION['sesion_token'])) {
         ), //configura las cabeceras enviadas al servicio
     )); //curl_setopt_array configura las opciones para una transferencia cURL
 
-    $response = curl_exec($curl); // respuesta generada
+    $response = curl_exec($curl); // respuesta generada≤≤
     $err = curl_error($curl); // muestra errores en caso de existir
 
     curl_close($curl); // termina la sesión 
