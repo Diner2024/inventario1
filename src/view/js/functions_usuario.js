@@ -325,7 +325,7 @@ async function reniciar_password(id) {
                 timer: 1000
             })
         }
-        //console.log(json);
+        //console.log(json); 
     } catch (e) {
         console.log("Error al actualizar periodo" + e);
     }

@@ -61,8 +61,8 @@ if ($tipo == "registrar") {
             $apellidos_nombres = $_POST['apellidos_nombres'];
             $correo = $_POST['correo'];
             $telefono = $_POST['telefono'];
-            $password = password_hash($dni,PASSWORD_DEFAULT);
-        
+            $password = password_hash($dni, PASSWORD_DEFAULT);
+
 
             if ($dni == "" || $apellidos_nombres == "" || $correo == "" || $telefono == "") {
                 //repuesta
@@ -144,4 +144,12 @@ if ($tipo == "reiniciar_password") {
         }
     }
     echo json_encode($arr_Respuesta);
+}
+if ($tipo == "send_email_password") {
+    $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
+    if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
+
+        $datos_sesion = $objSesion->buscarSesionLoginById($id_sesion);
+        print_r($datos_sesion);
+    }
 }
