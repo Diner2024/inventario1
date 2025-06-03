@@ -1,7 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\Exception; 
 
 session_start();
 require_once('../model/admin-sesionModel.php');
@@ -19,6 +19,18 @@ $objAdmin = new AdminModel();
 //variables de sesion
 $id_sesion = $_POST['sesion'];
 $token = $_POST['token'];
+
+if($tipo == "validar_datos_reset_password"){
+  $id_email = $_POST['id'];
+  $token_email = $_POST['token'];
+
+  $arr_Respuesta = array('status' => false, 'msg' => 'Link Caducado');
+  $datos_usuario = $objUsuario->buscarUsuarioById($id_email);
+  if ($datos_usuario->reset_password==1 && password_verify($datos_usuario->token_password,$token_email)) {
+    $arr_Respuesta = array('status' => true, 'msg' => 'OK');
+  }
+  echo json_encode($arr_Respuesta);
+}
 
 if ($tipo == "listar_usuarios_ordenados_tabla") {
     $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
@@ -200,336 +212,73 @@ try {
     $mail->CharSet='UTF-8';                                 //Set email format to HTML
     $mail->Subject = 'cambio de contraseña-Sistema de Inventario';
     $mail->Body    = '
-    
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elite Shoes - Restablecer Contraseña</title>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Open+Sans:wght@400;600;800&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+  <title>Restablecer Contraseña - ZapaSport</title>
   <style>
     body {
       margin: 0;
-      padding: 20px;
-      background: linear-gradient(45deg, #667eea, #764ba2, #4ecdc4, #667eea);
-      background-size: 400% 400%;
-      animation: gradientShift 6s ease infinite;
-      font-family: Open Sans, sans-serif;
-      min-height: 100vh;
+      padding: 0;
+      background-color: #f0f2f5;
     }
-    
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
     .container {
-      max-width: 650px;
+      max-width: 600px;
       margin: auto;
-      background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
-      font-family: Open Sans, sans-serif;
-      color: #2c3e50;
-      border: 4px solid transparent;
-      border-radius: 25px;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+      background-color: #ffffff;
+      font-family: Segoe UI, sans-serif;
+      color: #2c2c2c;
+      border-radius: 10px;
       overflow: hidden;
-      position: relative;
-      animation: borderRainbow 3s linear infinite;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    
-    @keyframes borderRainbow {
-      0% {
-        border-color: #667eea;
-        box-shadow: 0 30px 60px rgba(102,126,234,0.3), 0 0 40px rgba(102,126,234,0.5);
-      }
-      33.33% {
-        border-color: #764ba2;
-        box-shadow: 0 30px 60px rgba(118,75,162,0.3), 0 0 40px rgba(118,75,162,0.5);
-      }
-      66.66% {
-        border-color: #4ecdc4;
-        box-shadow: 0 30px 60px rgba(78,205,196,0.3), 0 0 40px rgba(78,205,196,0.5);
-      }
-      100% {
-        border-color: #667eea;
-        box-shadow: 0 30px 60px rgba(102,126,234,0.3), 0 0 40px rgba(102,126,234,0.5);
-      }
-    }
-    
     .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-color: #1e1e1e;
       color: white;
-      padding: 45px 20px;
+      padding: 20px;
       text-align: center;
-      position: relative;
-      overflow: hidden;
     }
-    
-    .header::before {
-      content: ;
-      position: absolute;
-      top: -100%;
-      left: -100%;
-      width: 300%;
-      height: 300%;
-      background: conic-gradient(transparent, rgba(255,255,255,0.3), transparent);
-      animation: spin 4s linear infinite;
+    .header img {
+      width: 100px;
+      margin-bottom: 10px;
     }
-    
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    
-    .header h2 {
-      font-family: Dancing Script, cursive;
-      font-size: 36px;
-      font-weight: 700;
-      margin: 0;
-      text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
-      position: relative;
-      z-index: 2;
-      animation: textPulse 2s ease-in-out infinite alternate;
-    }
-    
-    @keyframes textPulse {
-      from { 
-        text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
-        transform: scale(1);
-      }
-      to { 
-        text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.6);
-        transform: scale(1.05);
-      }
-    }
-    
     .content {
-      padding: 40px 35px;
-      background: white;
-      position: relative;
-    }
-    
-    .content::before {
-      content: ;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 8px;
-      background: linear-gradient(90deg, #667eea, #764ba2, #4ecdc4, #667eea);
-      background-size: 400% 100%;
-      animation: rainbowSlide 2s linear infinite;
-    }
-    
-    @keyframes rainbowSlide {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 400% 0%; }
-    }
-    
-    .content h1 {
-      font-family: Merriweather, serif;
-      font-size: 30px;
-      font-weight: 700;
-      margin-bottom: 25px;
-      color: #2c3e50;
-      text-align: center;
-      animation: slideInDown 1s ease-out;
-    }
-    
-    @keyframes slideInDown {
-      from { opacity: 0; transform: translateY(-50px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .content p {
-      font-size: 18px;
-      line-height: 1.8;
-      color: #34495e;
-      margin-bottom: 20px;
-      font-weight: 400;
-      text-align: justify;
-    }
-    
-    .promo-box {
-      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
-      color: white;
       padding: 30px;
-      border-radius: 20px;
-      margin: 30px 0;
-      text-align: center;
-      box-shadow: 0 20px 40px rgba(255,107,107,0.4);
-      animation: floatUpDown 3s ease-in-out infinite;
-      position: relative;
-      overflow: hidden;
     }
-    
-    @keyframes floatUpDown {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    
-    .promo-box::before {
-      content: ;
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: rotate 6s linear infinite;
-    }
-    
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    
-    .promo-box h3 {
-      margin: 0 0 15px 0;
-      font-family: Merriweather, serif;
-      font-weight: 700;
+    .content h1 {
       font-size: 24px;
-      position: relative;
-      z-index: 2;
+      margin-bottom: 20px;
+      color: #1e1e1e;
     }
-    
-    .promo-box p {
-      position: relative;
-      z-index: 2;
-      margin: 0;
-      color: white;
-      text-align: center;
+    .content p {
+      font-size: 16px;
+      line-height: 1.6;
     }
-    
     .button {
       display: inline-block;
-      background: linear-gradient(45deg, #667eea, #764ba2);
+      background-color: #ff3c38;
       color: #ffffff !important;
-      padding: 20px 40px;
-      margin: 25px 10px;
+      padding: 12px 25px;
+      margin: 25px 0;
       text-decoration: none;
-      border-radius: 50px;
-      font-weight: 800;
-      font-family: Open Sans, sans-serif;
-      font-size: 16px;
-      box-shadow: 0 20px 40px rgba(102,126,234,0.4);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      animation: buttonFlash 3s ease-in-out infinite;
+      border-radius: 5px;
+      font-weight: bold;
     }
-    
-    @keyframes buttonFlash {
-      0%, 100% { 
-        box-shadow: 0 20px 40px rgba(102,126,234,0.4);
-        transform: scale(1);
-      }
-      50% { 
-        box-shadow: 0 25px 50px rgba(102,126,234,0.6), 0 0 30px rgba(102,126,234,0.5);
-        transform: scale(1.05);
-      }
-    }
-    
-    .button:hover {
-      transform: translateY(-5px) scale(1.1);
-      box-shadow: 0 30px 60px rgba(102,126,234,0.6);
-    }
-    
-    .button::before {
-      content: ;
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-      transition: left 0.5s;
-    }
-    
-    .button:hover::before {
-      left: 100%;
-    }
-    
     .footer {
-      background: linear-gradient(135deg, #2c3e50, #34495e);
+      background-color: #eeeeee;
       text-align: center;
-      padding: 30px;
-      font-size: 14px;
-      color: #ecf0f1;
-      font-weight: 400;
+      padding: 15px;
+      font-size: 12px;
+      color: #666666;
     }
-    
-    .footer a {
-      color: #f9ca24;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-    
-    .footer a:hover {
-      color: #ff6b6b;
-      text-decoration: underline;
-      text-shadow: 0 0 10px rgba(255,107,107,0.5);
-    }
-    
-    .shoe-emoji {
-      font-size: 28px;
-      animation: bounce 2s ease-in-out infinite;
-      display: inline-block;
-    }
-    
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-15px); }
-      60% { transform: translateY(-8px); }
-    }
-    
-    .logo {
-      animation: logoFloat 3s ease-in-out infinite;
-      display: inline-block;
-    }
-    
-    @keyframes logoFloat {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-8px) rotate(5deg); }
-    }
-    
-    .sparkle {
-      animation: sparkle 1.5s ease-in-out infinite alternate;
-    }
-    
-    @keyframes sparkle {
-      from { opacity: 0.5; transform: scale(1); }
-      to { opacity: 1; transform: scale(1.2); }
-    }
-      body {
-        padding: 10px;
-      }
-      
+    @media screen and (max-width: 600px) {
       .content, .header, .footer {
-        padding: 25px 20px !important;
+        padding: 15px !important;
       }
-      
       .button {
-        padding: 15px 30px !important;
-        font-size: 14px;
-        display: block;
-        margin: 15px 0;
-        text-align: center;
-      }
-      
-      .header h2 {
-        font-size: 28px;
-      }
-      
-      .content h1 {
-        font-size: 24px;
-      }
-      
-      .content p {
-        font-size: 16px;
+        padding: 10px 20px !important;
       }
     }
   </style>
@@ -537,79 +286,25 @@ try {
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo">
-        <svg width="60" height="60" viewBox="0 0 100 100" style="margin-bottom: 10px;">
-          <defs>
-            <linearGradient id="shoeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#f0f0f0;stop-opacity:1" />
-            </linearGradient>
-            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#4ecdc4;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#45b7d1;stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          <!-- Círculo de fondo -->
-          <circle cx="50" cy="50" r="45" fill="url(#logoGradient)" stroke="#ffffff" stroke-width="3"/>
-          <!-- Zapatilla deportiva -->
-          <ellipse cx="50" cy="55" rx="30" ry="12" fill="url(#shoeGradient)" stroke="#333" stroke-width="2"/>
-          <!-- Suela -->
-          <ellipse cx="50" cy="62" rx="32" ry="8" fill="#333" opacity="0.8"/>
-          <!-- Líneas de diseño -->
-          <path d="M 25 50 Q 35 45 45 50 Q 55 55 65 50 Q 70 48 75 50" stroke="#333" stroke-width="2" fill="none"/>
-          <!-- Cordones -->
-          <circle cx="40" cy="48" r="2" fill="#333"/>
-          <circle cx="50" cy="46" r="2" fill="#333"/>
-          <circle cx="60" cy="48" r="2" fill="#333"/>
-          <!-- Texto ELITE -->
-          <text x="50" y="25" text-anchor="middle" fill="#ffffff" font-family="Arial Black" font-size="12" font-weight="bold">ELITE</text>
-          <!-- Texto SHOES -->
-          <text x="50" y="38" text-anchor="middle" fill="#ffffff" font-family="Arial" font-size="8" font-weight="bold">SHOES</text>
-        </svg>
-      </div>
-      <h2><span class="shoe-emoji">👟</span> ELITE SHOES BOUTIQUE <span class="shoe-emoji">⚽</span></h2>
+      <img src="https://sdmntprwestus2.oaiusercontent.com/files/00000000-c96c-61f8-bb20-97e2b2d90ad5/raw?se=2025-06-03T18%3A36%3A23Z&sp=r&sv=2024-08-04&sr=b&scid=215a98c5-a28e-5841-8d01-6d930aa66b61&skoid=71e8fa5c-90a9-4c17-827b-14c3005164d6&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-03T00%3A05%3A31Z&ske=2025-06-04T00%3A05%3A31Z&sks=b&skv=2024-08-04&sig=VQ5%2BdYtaicMEjcW5wCNeLg4pIO5tgE/IZwVgwvoRlPc%3D" alt="ZapaSport Logo">
+      <h2>ZapaSport</h2>
     </div>
-    
     <div class="content">
-      <h1>¡Hola DINER GARCIA CONDORI! <span class="sparkle">🔐</span></h1>
-      
-      <p>
-        Hemos recibido una solicitud para <strong>restablecer la contraseña</strong> de tu cuenta en 
-        <strong>Elite Shoes Boutique</strong>. Si realizaste esta solicitud, puedes cambiar tu contraseña 
-        haciendo clic en el botón de abajo.
-      </p>
-      
-      <div class="promo-box">
-        <h3><span class="sparkle">🔒</span> RESTABLECIMIENTO DE CONTRASEÑA <span class="sparkle">🔒</span></h3>
-        <p>Haz clic en el botón de abajo para crear una nueva contraseña segura para tu cuenta. Este enlace expirará en 24 horas por seguridad.</p>
-      </div>
-      
-      <p>
-        Si <strong>NO solicitaste</strong> este cambio de contraseña, puedes ignorar este correo electrónico. 
-        Tu contraseña actual permanecerá sin cambios y tu cuenta seguirá siendo segura.
-      </p>
-      
-      <div style="text-align: center; margin: 35px 0;">
-        <a href="https://www.eliteshoesboutique.com/reset-password?token=abc123xyz789" class="button">
-          <span class="sparkle">🔐</span> Cambiar Mi Contraseña
-        </a>
-      </div>
-      
-      <p style="text-align: center; font-style: italic; color: #7f8c8d; font-size: 16px; font-family: Dancing Script, cursive;">
-        <strong>Importante:</strong> Por tu seguridad, nunca compartas tus credenciales de acceso con nadie.<br>
-        <span style="font-size: 14px; color: #95a5a6;">Si tienes problemas, contacta nuestro soporte técnico.</span>
-      </p>
+      <h1>¡Hola '.$datos_usuario->nombres_apellidos.',</h1>
+      <p>Recibimos una solicitud para cambiar la contraseña de tu cuenta en <strong>ZapaSport</strong>.</p>
+      <p>Si fuiste tú quien la solicitó, haz clic en el botón a continuación para restablecer tu contraseña de forma segura:</p>
+      <a href="'.BASE_URL.'reset-password?data='.$datos_usuario->id.'&data2='.$token.'" class="button">Restablecer Contraseña</a>
+      <p>Si no solicitaste este cambio, puedes ignorar este mensaje. Tu contraseña actual seguirá funcionando.</p>
+      <p>Gracias por confiar en ZapaSport, donde tus pasos comienzan con estilo.</p>
     </div>
-    
     <div class="footer">
-      © 2025 Elite Shoes Boutique. Todos los derechos reservados.<br><br>
-      <a href="https://www.eliteshoesboutique.com/desuscribirse">Cancelar suscripción</a> | 
-      <a href="https://www.eliteshoesboutique.com/contacto">Soporte Técnico</a> | 
-      <a href="https://www.eliteshoesboutique.com/politicas-seguridad">Políticas de Seguridad</a>
+      © 2025 ZapaSport. Todos los derechos reservados.<br>
+      <a href="https://www.zapasport.com/desuscribirse">Cancelar suscripción</a>
     </div>
   </div>
 </body>
 </html>
+
     ';
    
 
