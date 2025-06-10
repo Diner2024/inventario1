@@ -1,3 +1,10 @@
+
+<?php
+$data1 = $_GET['data'];
+$data2 = urldecode($_GET['data2']);
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -90,23 +97,25 @@
   </script>
 
 </head>
-<input type="hidden" id="data1" value="<?php echo $_GET['data1']?>">
-<input type="hidden" id="data2" value="<?php echo $_GET['data2']?>">
-<input type="hidden">
+<input type="hidden" id="data" value="<?php echo $data1; ?>">
+<input type="hidden" id="data2" value="<?php echo $data2; ?>">
 <body>
- <div class="login-container">
+ <div class="login-container" id="contentn_reset">
     <h1>Recuperar contraseña </h1>
     <img src="https://sispa.iestphuanta.edu.pe/img/logo.png" alt="" width="100%">
     <h4>Sistema de Control de Inventario</h4>
     <form id="frm_reset-password">
-      <input type="password" name="password" id="password" placeholder="Nueva Contraseña" required>
-      <input type="password" name="password" id="password" placeholder="Confirmar Contraseña" required>
-      <button type="submit">Actualizar contraseña</button>
+      <input type="password" name="password" id="cont" placeholder="Nueva Contraseña" required>
+      <input type="password" name="password" id="cont2" placeholder="Confirmar Contraseña" required>
+      <button type="button" onclick="validar_imputs_password();">Actualizar contraseña</button>
     </form>
     <a href="#">¿Olvidaste tu contraseña?</a>
   </div>
 </body>
 <script src="<?php echo BASE_URL; ?>src/view/js/principal.js"></script>
+<script>
+  validar_datos_reset_password();
+</script>
 <!-- Sweet Alerts Js-->
 <script src="<?php echo BASE_URL ?>src/view/pp/plugins/sweetalert2/sweetalert2.min.js"></script>
 

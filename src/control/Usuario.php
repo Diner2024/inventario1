@@ -293,7 +293,7 @@ try {
       <h1>¡Hola '.$datos_usuario->nombres_apellidos.',</h1>
       <p>Recibimos una solicitud para cambiar la contraseña de tu cuenta en <strong>ZapaSport</strong>.</p>
       <p>Si fuiste tú quien la solicitó, haz clic en el botón a continuación para restablecer tu contraseña de forma segura:</p>
-      <a href="'.BASE_URL.'reset-password?data='.$datos_usuario->id.'&data2='.$token.'" class="button">Restablecer Contraseña</a>
+      <a href="'.BASE_URL.'reset-password/?data='.$datos_usuario->id.'&data2='.urlencode($token) .'" class="button">Restablecer Contraseña</a>
       <p>Si no solicitaste este cambio, puedes ignorar este mensaje. Tu contraseña actual seguirá funcionando.</p>
       <p>Gracias por confiar en ZapaSport, donde tus pasos comienzan con estilo.</p>
     </div>

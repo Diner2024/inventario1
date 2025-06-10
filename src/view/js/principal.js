@@ -172,8 +172,11 @@ function cargar_sede_filtro(sedes) {
 async function validar_datos_reset_password(){
     let id = document.getElementById('data').value;
     let token = document.getElementById('data2').value;
+
+    const formData = new FormData();
     formData.append('id', id);
     formData.append('token', token);
+    formData.append('sesion', '');
 
     try {
         let respuesta = await fetch(base_url_server + 'src/control/Usuario.php?tipo=validar_datos_reset_password', {
@@ -183,11 +186,156 @@ async function validar_datos_reset_password(){
             body: formData
         });
         let json = await respuesta.json();
-        if (json.status) {
-            location.reload();
+        if (json.status == false) {
+        Swal.fire({
+        type: 'error',
+        title: 'Error de Sesión',
+        text: "Link Caducada, Verefique su correo",
+        confirmButtonClass: 'btn btn-confirm mt-2',
+        footer: '',
+        timer: 1000
+    });
+    let formulario = document.getElementById('contentn_reset');
+    formulario.innerHTML = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Enlace Caducado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html {
+      background-color: #000;
+    }
+
+    body {
+      background-color: #000;
+      color: #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      animation: flicker 2s infinite;
+    }
+
+    h1 {
+      font-size: 2em;
+      text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+    }
+
+    .link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: 2px solid #0f0;
+      color: #0f0;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2em;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px #0f0, 0 0 20px #0f0;
+    }
+
+    .link:hover {
+      background-color: #0f0;
+      color: #000;
+      box-shadow: 0 0 20px #0f0, 0 0 40px #0f0;
+    }
+
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+      }
+      20%, 24%, 55% {
+        opacity: 0.4;
+      }
+    }
+
+    .glitch {
+      position: relative;
+      color: #00ffcc;
+      animation: glitch 1.5s infinite;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      10% { transform: translate(-2px, 2px); }
+      20% { transform: translate(2px, -2px); }
+      30% { transform: translate(-2px, -2px); }
+      40% { transform: translate(2px, 2px); }
+      50% { transform: translate(0); }
+      60% { transform: translate(2px, 0); }
+      70% { transform: translate(-2px, 0); }
+      80% { transform: translate(0); }
+      90% { transform: translate(2px, 2px); }
+      100% { transform: translate(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="glitch">⚠️ ENLACE CADUCADO ⚠️</h1>
+    <p>Este enlace ha sido bloqueado por motivos de seguridad.</p>
+    <a href="https://www.hackthissite.org/" class="link">Acceso No Autorizado</a>
+  </div>
+</body>
+</html>
+`;
+    //location.replace(base_url + "login");
+
         }
     }catch (e) {
         console.log("Error al validar datos" + e);
     }
 
+}
+
+function validar_imputs_password(){
+    let pass1 = document.getElementById('cont').value;
+    let pass2 = document.getElementById('cont2').value;
+    if (pass1 !== pass2){
+        Swal.fire({
+        type: 'error',
+        title: 'Error',
+        text: "Contraseña no Coinciden ",
+        footer: '',
+        timer: 1500
+    });
+    return;
+    }
+    if (pass1.length<8 && pass2.length<8){
+         Swal.fire({
+        type: 'error',
+        title: 'Error',
+        text: "La Contraseña tiene que ser mínimo 8 caracteres",
+        footer: '',
+        timer: 1500
+    });
+    return;
+    }
+    actualizar_password();
+}
+
+async function actualizar_password() {
+ //  Swal.fire({
+     //   type: 'seccess',
+      //  title: 'Error',
+      //  text: "Se Actualizo la Contraseña",
+      //  footer: '',
+     //   timer: 1500
+    //});
+
+
+
+    //enviar informacion de password y id al controlador usuario
+    // recibir informacion y incriptar la nueva contraseña 
+    // guardar en base de datos y actualizar campo de reset_password = 0 y token_password = ''
+    // notificar a usuario sobre el estado del proceso😳
+    
 }
