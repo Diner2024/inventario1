@@ -318,19 +318,42 @@ function validar_imputs_password(){
         timer: 1500
     });
     return;
+    }else{
+       actualizar_password(); 
     }
-    actualizar_password();
 }
 
 async function actualizar_password() {
- //  Swal.fire({
-     //   type: 'seccess',
-      //  title: 'Error',
-      //  text: "Se Actualizo la Contraseña",
-      //  footer: '',
-     //   timer: 1500
-    //});
+    
+    let id = document.getElementById('data').value;
+    let contrasenia = document.getElementById('cont').value;
 
+    const formdata = new FormData();
+    formdata.append('id',id);
+    formdata.append('constrasenia',contrasenia);
+    formdata.append('sesion','');
+    formdata.append('token','');
+   try {
+    let respuesta = await fetch(base_url+'src/control/Usuario.php?tipo=cambiarContrasenia',{
+        method: 'POST',
+        mode:'cors',
+        cache: 'no-cache',
+        body: formdata
+    });
+    let json = await respuesta.json();
+    if (json) {
+        Swal.fire({
+         type:'success',
+         title:'Actualizado',
+         text:'CONTRASEÑA ACTUALIZADA',
+         footer: '',
+         timer: 3000
+        });
+    }
+   } catch (e) {
+     console.log('error al cambiar contraseña'+ e);
+   }
+  
 
 
     //enviar informacion de password y id al controlador usuario

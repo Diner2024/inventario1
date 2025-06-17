@@ -20,6 +20,29 @@ $objAdmin = new AdminModel();
 $id_sesion = $_POST['sesion'];
 $token = $_POST['token'];
 
+if ($tipo == "cambiarContrasenia") {
+  $arr_Respuesta = array('status'=>false ,'mensaje' =>'Error al cambiar contra');
+
+  if($_POST){
+    $idUsuario = $_POST['id'];
+    $contrasenia = $_POST['constrasenia'];
+    $contrasenia_segura = password_hash($contrasenia, PASSWORD_DEFAULT);
+
+    $arr_Usuario = $objUsuario->actualizarPassword($idUsuario,$contrasenia_segura);
+    if ($arr_Usuario) {
+      $token_password = '';
+      $reset_password = 0;
+      $vacia_token = $objUsuario->updateResetPassword($idUsuario, $token_password,$reset_password);
+      if ($vacia_token) {
+        $arr_Respuesta = array('status'=>true, 'mensaje'=>'Contraseña cambiada correctamente');
+      }
+    } else {
+       $arr_Respuesta = array('status'=>false, 'mensaje'=>'Error cambiar contraseña');
+    }
+  }
+  echo json_encode($arr_Respuesta);
+}
+
 if($tipo == "validar_datos_reset_password"){
   $id_email = $_POST['id'];
   $token_email = $_POST['token'];
