@@ -282,7 +282,7 @@ async function validar_datos_reset_password(){
   <div class="container">
     <h1 class="glitch">⚠️ ENLACE CADUCADO ⚠️</h1>
     <p>Este enlace ha sido bloqueado por motivos de seguridad.</p>
-    <a href="https://www.hackthissite.org/" class="link">Acceso No Autorizado</a>
+    <a href="../login" class="link">Acceso No Autorizado</a>
   </div>
 </body>
 </html>
@@ -352,13 +352,9 @@ async function actualizar_password() {
     }
    } catch (e) {
      console.log('error al cambiar contraseña'+ e);
-   }
-  
-
-
-    //enviar informacion de password y id al controlador usuario
+   }   
+}
+//enviar informacion de password y id al controlador usuario
     // recibir informacion y incriptar la nueva contraseña 
     // guardar en base de datos y actualizar campo de reset_password = 0 y token_password = ''
     // notificar a usuario sobre el estado del proceso😳
-    
-}
