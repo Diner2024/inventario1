@@ -89,7 +89,7 @@ if ($tipo == "listar_movimientos_ordenados_tabla") {
                 $arr_contenido[$i]->fecha_registro = $arr_Ambiente[$i]->fecha_registro;
                 $arr_contenido[$i]->descripcion = $arr_Ambiente[$i]->descripcion;
                 $opciones = '<button type="button" title="Ver" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target=".modal_ver' . $arr_Ambiente[$i]->id . '"><i class="fa fa-eye"></i></button>
-                <a href="'.BASE_URL.'imprimir-movimiento/'.$arr_Ambiente[$i]->id.'" class="btn btn-outline-primary"><i class="fa fa-print"></i></a>
+                <a href="' . BASE_URL . 'imprimir-movimiento/' . $arr_Ambiente[$i]->id . '" class="btn btn-outline-primary"><i class="fa fa-print"></i></a>
                 ';
                 $arr_contenido[$i]->options = $opciones;
             }
@@ -204,19 +204,36 @@ if ($tipo == "datos_registro") {
         $arr_Respuesta['msg'] = "Datos encontrados";
     }
     echo json_encode($arr_Respuesta);
+}
+if($tipo == "buscar_movimiento_id"){
+   
+ if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
+    $id_movimiento = $_REQUEST['data'];
+    $arr_Movimiento = $objMovimiento->buscarMovimientoById($id_movimiento);
+
+    $id_ambiente = $arr_Movimiento->id_ambiente_origen;
+    $id_usuario = $arr_Movimiento->id_usuario_registro;
+    $id_ambiente_destino = $arr_Movimiento->id_ambiente_destino;
+    $id_ies = $arr_Movimiento->id_ies;
+
+    $arrAmbOrigen = $objAmbiente->buscarAmbienteById($id_ambiente);
+    $arrAmbDestino = $objAmbiente->buscarAmbienteById($id_ambiente_destino);
+    $arries = $objInstitucion->buscarInstitucionById($id_ies);
+    $arrUsuario = $objUsuario->buscarUsuarioById($id_usuario);
+    $arrDetalle = $objMovimiento->buscarDetalle_MovimientoByMovimiento($id_movimiento);
+    $array_bienes = array();
+    foreach ($variable as $bien) {
+        $id_bien = $bien->id_bien;
+        $res_bien = $objBien->buscarBienById($id_bien);
     }
-    if ($tipo == "buscar_movimiento_id");{   
-        $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
-        if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
-            $id_movimiento = $_REQUEST['data'];
-            $arrMovimiento = $objMovimiento->buscarMovimientoById($id_movimiento);
-            $arrAmbOrigen = $objAmbiente->buscarAmbienteById($arrMovimiento->id_ambiente_origen);
-            $arrAmbDestino = $objAmbiente->buscarAmbienteById($arrMovimiento->id_ambiente_destino);
-            $arrUsuario = $objUsuario->buscarUsuarioById($arrMovimiento->$id_usuario);
-            $arries = $objInstitucion->buscarInstitucionById($arrMovimiento->id_ies);
-
-
-
-    }
-    echo json_encode($arries);
+    $arr_Respuesta['movimiento'] = $arr_Movimiento;
+    $arr_Respuesta['ambiente_origen'] = $arrAmbOrigen;
+    $arr_Respuesta['ambiente_destino'] = $arrAmbDestino;
+    $arr_Respuesta['usuario'] = $arrUsuario;
+    $arr_Respuesta['institucion'] = $arries;
+    $arr_Respuesta['detalle'] = $arrDetalle;
+    $arr_Respuesta['status'] = true;
+    $arr_Respuesta['msg'] = 'correcto';
+ }
+ echo json_encode($arr_Respuesta);
 }
