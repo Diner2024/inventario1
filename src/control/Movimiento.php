@@ -222,10 +222,13 @@ if($tipo == "buscar_movimiento_id"){
     $arrUsuario = $objUsuario->buscarUsuarioById($id_usuario);
     $arrDetalle = $objMovimiento->buscarDetalle_MovimientoByMovimiento($id_movimiento);
     $array_bienes = array();
-    foreach ($variable as $bien) {
-        $id_bien = $bien->id_bien;
-        $res_bien = $objBien->buscarBienById($id_bien);
-    }
+foreach ($arrDetalle as $bien) {
+            $id_bien = $bien->id_bien;
+            $res_bien = $objBien->buscarBienById($id_bien);
+            if ($res_bien) {
+                array_push($arr_bienes, $res_bien); // Uso de array_push para agregar el bien
+            }
+        }
     $arr_Respuesta['movimiento'] = $arr_Movimiento;
     $arr_Respuesta['ambiente_origen'] = $arrAmbOrigen;
     $arr_Respuesta['ambiente_destino'] = $arrAmbDestino;
