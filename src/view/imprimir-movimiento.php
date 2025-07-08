@@ -165,4 +165,21 @@ $curl = curl_init(); //inicia la sesión cURL
     }
 
     require_once('./vendor/tecnickcom/tcpdf/tcpdf.php');
+    $pdf =new TCPDF();
 
+// set document information
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetAuthor('Diner GARCIA');
+$pdf->SetTitle('Reporte de fecha');
+
+// set margins
+$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+
+// asignar salto de pagina automatico
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// tipo de fuente y tamaño
+$pdf->SetFont('dejavusans', '', 10);
+
+
+?>
