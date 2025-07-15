@@ -22,10 +22,10 @@ public function Header() {
     $this->SetFont('helvetica', 'B', 10);
     $this->SetY(10);
     $this->Cell(0, 5, 'GOBIERNO REGIONAL DE AYACUCHO', 0, 1, 'C');
-    
+    //
     $this->SetFont('helvetica', 'B', 12);
     $this->Cell(0, 5, 'DIRECCIÓN REGIONAL DE EDUCACIÓN DE AYACUCHO', 0, 1, 'C');
-
+    //
     $this->SetFont('helvetica', '', 9);
     $this->Cell(0, 5, 'DIRECCION DE ADMINISTRACION', 0, 1, 'C');
     
@@ -58,32 +58,23 @@ public function Header() {
     $this->Image($image_path_goba, 170, 8, 25, 0, '', '', 'T', false, 300, 'R', false, false, 0, false, false, false);
 }
 public function Footer() {
-    $this->SetY(-20);
-    $this->SetFont('helvetica', '', 8);
+    $this->SetY(-22); // posición del footer
+    $this->SetFont('helvetica', '', 7.5);
+
     $footer_html = '
-    <table border="0" cellpadding="1" cellspacing="0" width="100%">
+    <table width="100%" style="font-family: sans-serif; font-size: 8pt; color: #333;">
         <tr>
-            <!-- Columna Izquierda: URL -->
-            <td width="48%" align="center" valign="middle">
-                <a href="http://www.dreaya.gob.pe" style="color:#0000ff; text-decoration:underline; font-size:10pt;">www.dreaya.gob.pe</a>
+            <td width="35%" align="center" style="background-color:#e8f0fe; padding: 5px;">
+                <a href="http://www.dreaya.gob.pe" style="color:#1a73e8; font-weight:bold; text-decoration:none;">🌐 www.dreaya.gob.pe</a>
             </td>
-
-            <!-- Columna Central: Línea vertical roja -->
-            <!-- Truco: Usamos un div con un borde izquierdo dentro de una celda -->
-            <td width="4%" align="center">
-                <div style="border-left: 1px solid #C5232A; height: 15px;"> </div>
-            </td>
-
-            <!-- Columna Derecha: Información de contacto -->
-            <!-- Usamos entidades HTML para los iconos de teléfono (☎) y fax () -->
-            <td width="48%" align="left" valign="middle" style="font-size:8pt; line-height:1.4;">
-                Jr. 28 de Julio N° 383 - Huamanga<br>
-                ☎ (066) 31-2364<br>
-                 (066) 31-1395 Anexo 55001
+            <td width="2%" style="background-color:#C5232A;"></td>
+            <td width="63%" style="padding: 5px;">
+                <strong style="color:#C5232A;">Dirección:</strong> Jr. 28 de Julio N° 383, Huamanga<br/>
+                📞 (066) 31-2364 &nbsp;&nbsp; 📠 (066) 31-1395 Anexo 55001
             </td>
         </tr>
-    </table>
-    ';
+    </table>';
+    
     $this->writeHTML($footer_html, true, false, true, false, '');
 }
 }
