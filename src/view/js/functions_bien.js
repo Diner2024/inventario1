@@ -485,4 +485,3 @@ async function actualizarBien(id) {
         console.log("Error al actualizar periodo" + e);
     }
 }
-

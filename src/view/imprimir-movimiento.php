@@ -1,38 +1,38 @@
-<?php
+<?php 
 $ruta = explode("/", $_GET['views']);
-if(!isset($ruta[1]) || $ruta[1]==""){
-header("location: " .BASE_URL. "movimiento");
+
+if (!isset($ruta[1]) || $ruta[1] == "") {
+    header("location: " . BASE_URL. "movimientos");
+
 }
+
 
 require_once('./vendor/tecnickcom/tcpdf/tcpdf.php');
 
-// 2. CREAR UNA CLASE PERSONALIZADA QUE EXTIENDE DE TCPDF
 class MYPDF extends TCPDF {
 
-    // Método para el encabezado personalizado
 public function Header() {
-    // --- RUTA ABSOLUTA A LAS IMÁGENES JPG ---
-    $image_path_goba = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT72gURRvO9EMLPg4EM7_0Ttl2u52Xigbe6IA&s';
-    $image_path_dre = 'https://dreayacucho.gob.pe/storage/directory/ZOOEA2msQPiXYkJFx4JLjpoREncLFn-metabG9nby5wbmc=-.webp';
+    $image_path_dre = __DIR__ . '/images/gobayacucho.jpg';
+    $image_path_goba = __DIR__ . '/images/dreaya.jpg';
 
     // --- LOGO IZQUIERDO ---
-    $this->Image($image_path_dre, 15, 8, 25, 0, '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+    $this->Image($image_path_dre, 15, 8, 25, 0, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
     
     // --- TEXTOS DEL CENTRO ---
     $this->SetFont('helvetica', 'B', 10);
     $this->SetY(10);
     $this->Cell(0, 5, 'GOBIERNO REGIONAL DE AYACUCHO', 0, 1, 'C');
-    //
+    
     $this->SetFont('helvetica', 'B', 12);
     $this->Cell(0, 5, 'DIRECCIÓN REGIONAL DE EDUCACIÓN DE AYACUCHO', 0, 1, 'C');
-    //
+
     $this->SetFont('helvetica', '', 9);
     $this->Cell(0, 5, 'DIRECCION DE ADMINISTRACION', 0, 1, 'C');
     
-    // --- DIBUJO DE LÍNEAS CON FUNCIONES NATIVAS (LA SOLUCIÓN) ---
+    // --- DIBUJO DE LÍNEAS CON FUNCIONES NATIVAS---
 
     // Parámetros para las líneas
-    $lineWidth = 140; // Ancho de las líneas en mm. Ajústalo si es necesario.
+    $lineWidth = 140; 
     $pageWidth = $this->getPageWidth();
     $x = ($pageWidth - $lineWidth) / 2; // Calcula la posición X para centrar las líneas
     
@@ -55,31 +55,43 @@ public function Header() {
 
     // --- LOGO DERECHO ---
     // Dibujamos este logo al final para asegurarnos que esté en la capa superior si se solapa.
-    $this->Image($image_path_goba, 170, 8, 25, 0, '', '', 'T', false, 300, 'R', false, false, 0, false, false, false);
+    $this->Image($image_path_goba, 170, 8, 25, 0, 'JPG', '', 'T', false, 300, 'R', false, false, 0, false, false, false);
 }
-public function Footer() {
-    $this->SetY(-22); // posición del footer
-    $this->SetFont('helvetica', '', 7.5);
 
+public function Footer() {
+    $this->SetY(-20);
+    $this->SetX(120);
+    $this->SetFont('helvetica', '', 8);
     $footer_html = '
-    <table width="100%" style="font-family: sans-serif; font-size: 8pt; color: #333;">
+    <table border="0" cellpadding="1" cellspacing="0" width="100%">
         <tr>
-            <td width="35%" align="center" style="background-color:#e8f0fe; padding: 5px;">
-                <a href="http://www.dreaya.gob.pe" style="color:#1a73e8; font-weight:bold; text-decoration:none;">🌐 www.dreaya.gob.pe</a>
+            <!-- Columna Izquierda: URL -->
+            <td width="48%" align="center" valign="middle">
+                <a href="http://www.dreaya.gob.pe" style="color:#0000ff; text-decoration:underline; font-size:10pt;">www.dreaya.gob.pe</a>
             </td>
-            <td width="2%" style="background-color:#C5232A;"></td>
-            <td width="63%" style="padding: 5px;">
-                <strong style="color:#C5232A;">Dirección:</strong> Jr. 28 de Julio N° 383, Huamanga<br/>
-                📞 (066) 31-2364 &nbsp;&nbsp; 📠 (066) 31-1395 Anexo 55001
+
+            <!-- Columna Central: Línea vertical roja -->
+            <!-- Truco: Usamos un div con un borde izquierdo dentro de una celda -->
+            <td width="4%" align="center">
+                <div style="border-left: 1px solid #C5232A; height: 15px;"> </div>
+            </td>
+
+            <!-- Columna Derecha: Información de contacto -->
+            <!-- Usamos entidades HTML para los iconos de teléfono (☎) y fax () -->
+            <td width="48%" align="left" valign="middle" style="font-size:8pt; line-height:1.4;">
+                Jr. 28 de Julio N° 383 - Huamanga<br>
+                ☎ (066) 31-2364<br>
+                 (066) 31-1395 Anexo 55001
             </td>
         </tr>
-    </table>';
-    
+    </table>
+    ';
     $this->writeHTML($footer_html, true, false, true, false, '');
 }
 }
 
-$curl = curl_init(); //inicia la sesión cURL
+
+ $curl = curl_init(); //inicia la sesión cURL
     curl_setopt_array($curl, array(
         CURLOPT_URL => BASE_URL_SERVER."src/control/Movimiento.php?tipo=buscar_movimiento_id&sesion=".$_SESSION['sesion_id']."&token=".$_SESSION['sesion_token']."&data=". $ruta[1], //url a la que se conecta
         CURLOPT_RETURNTRANSFER => true, //devuelve el resultado como una cadena del tipo curl_exec
@@ -161,18 +173,15 @@ $curl = curl_init(); //inicia la sesión cURL
       text-align: center;
       padding: 6px;
     }
-    .firma {
-      margin-top: 80px;
-      display: flex;
-      padding: 0 50px;
-    }
-    .firma div {
-      text-align: center;
-    }
     .fecha {
       margin-top: 30px;
       text-align: right;
     }
+
+    .firma-section tr td{
+       border: none;
+      }
+
   </style>
 </head>
 <body>
@@ -222,17 +231,22 @@ $curl = curl_init(); //inicia la sesión cURL
   <div class="fecha">
     Ayacucho, '. $dia . " de " . $meses[$mesNumero] . " del " . $año.'
   </div>
-
-  <div class="firma">
+<table  class="firma-section">
+  <tr>
+  <td>
     <div>
       ------------------------------<br>
       ENTREGUÉ CONFORME
     </div>
+    </td>
+    <td>
     <div>
       ------------------------------<br>
       RECIBÍ CONFORME
     </div>
-  </div>
+    </td>
+   </tr>
+  </table>
 
 </body>
 </html>';

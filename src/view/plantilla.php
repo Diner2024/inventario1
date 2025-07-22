@@ -4,12 +4,10 @@ require_once "./src/config/config.php";
 require_once "./src/control/vistas_control.php";
 
 
+
 $mostrar = new vistasControlador();
 $vista = $mostrar->obtenerVistaControlador();
-$reset = '';
-if ($vista == "reset_password"){
-    $vista = "reset_password";
-}
+
 
 if (isset($_SESSION['sesion_id']) && isset($_SESSION['sesion_token'])) {
 
@@ -29,7 +27,7 @@ if (isset($_SESSION['sesion_id']) && isset($_SESSION['sesion_token'])) {
         ), //configura las cabeceras enviadas al servicio
     )); //curl_setopt_array configura las opciones para una transferencia cURL
 
-    $response = curl_exec($curl); // respuesta generada≤≤
+    $response = curl_exec($curl); // respuesta generada
     $err = curl_error($curl); // muestra errores en caso de existir
 
     curl_close($curl); // termina la sesión 
@@ -47,18 +45,16 @@ if (isset($_SESSION['sesion_id']) && isset($_SESSION['sesion_token'])) {
         $vista = "login";
     }
 }
-if ($reset == "reset_password"){
-    $reset = "reset_password";
-}
 
-if ($vista == "login" || $vista == "404" || $vista == "reset-password") {
+
+if ($vista == "login" || $vista == "404" ||$vista == "UpdatePassword" ) {
     require_once "./src/view/" . $vista . ".php";
 } else {
-    if ($vista != './src/view/imprimir-movimiento.php' && $vista != './src/view/reporte-bienes.php'){
-       include "./src/view/include/header.php"; 
+   if($vista != "./src/view/imprimir-movimiento.php" && $vista != "./src/view/reporte-bienes.php" && $vista != "./src/view/imprimir-pdfs.php"){
+       include "./src/view/include/header.php";
     }
     include $vista;
-    if ($vista != './src/view/imprimir-movimiento.php' && $vista != './src/view/reporte-bienes.php'){
-       include "./src/view/include/footer.php"; 
-    }
+      if($vista != "./src/view/imprimir-movimiento.php" && $vista != "./src/view/reporte-bienes.php" && $vista != "./src/view/imprimir-pdfs.php"){
+       include "./src/view/include/footer.php";
+    } 
 }

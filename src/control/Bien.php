@@ -5,6 +5,7 @@ require_once('../model/admin-bienModel.php');
 require_once('../model/admin-ingresoModel.php');
 require_once('../model/admin-ambienteModel.php');
 require_once('../model/adminModel.php');
+require_once('../model/admin-usuarioModel.php');
 $tipo = $_GET['tipo'];
 
 //instanciar la clase categoria model
@@ -13,6 +14,7 @@ $objBien = new BienModel();
 $objIngreso = new IngresoModel();
 $objAmbiente = new AmbienteModel();
 $objAdmin = new AdminModel();
+$objUsuario = new UsuarioModel();
 
 //variables de sesion
 $id_sesion = $_REQUEST['sesion'];
@@ -228,13 +230,28 @@ if ($tipo == "datos_registro") {
     echo json_encode($arr_Respuesta);
 }
 
-if ($tipo == "listarBienes") {
-        $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
-    if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)){
-        $arr_Bienes = $objBien->listarBienes();
-        $arr_Respuesta['bienes'] = $arr_Bienes;
-        $arr_Respuesta['status'] = true;
-        $arr_Respuesta['msg'] = 'correcto';
-    } 
+if($tipo == "ObtenerTodosBienes"){
+   $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
+    if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
+
+        
+$arr_bienes = $objBien->listarBienes();
+
+    for ($i=0; $i < count($arr_bienes); $i++) { 
+            $ingreso = $objIngreso->buscarIngresoBienbyId($arr_bienes[$i]->id_ingreso_bienes);
+            $ambiente = $objAmbiente->buscarAmbienteById($arr_bienes[$i]->id_ambiente);
+            $usuario = $objUsuario->buscarUsuarioById($arr_bienes[$i]->usuario_registro);
+
+            $arr_bienes[$i]->usuarioregistro = $usuario->nombres_apellidos;
+            $arr_bienes[$i]->ambiente = $ambiente->detalle;
+            $arr_bienes[$i]->ingresonombre = $ingreso->detalle;
+        }
+
+       
+       $arr_Respuesta['bienes'] = $arr_bienes;
+       $arr_Respuesta['status'] = true;
+       $arr_Respuesta['msg'] = 'listado correcto';
+
+    }
     echo json_encode($arr_Respuesta);
 }
