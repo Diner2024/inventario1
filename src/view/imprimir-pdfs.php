@@ -7,8 +7,8 @@ if (!isset($ruta[1]) || $ruta[1] == "") {
 require_once('./vendor/tecnickcom/tcpdf/tcpdf.php');
 class MYPDF extends TCPDF {
 public function Header() {
-    $image_path_dre = __DIR__ . '/images/gobayacucho.jpg';
-    $image_path_goba = __DIR__ . '/images/dreaya.jpg';
+    $image_path_dre = __DIR__ . '/images/gobayacucho.jpg → /images/gobayacucho.png';
+    $image_path_goba = __DIR__ . '/images/dreaya.jpg → /images/dreaya.png';
     // --- LOGO IZQUIERDO ---
     $this->Image($image_path_dre, 15, 8, 25, 0, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
     // --- TEXTOS DEL CENTRO ---
