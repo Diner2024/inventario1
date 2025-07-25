@@ -10,7 +10,15 @@ class UsuarioModel
         $this->conexion = new Conexion();
         $this->conexion = $this->conexion->connect();
     }
-    public function registrarUsuario($dni, $apellidos_nombres,$correo, $telefono, $password)
+    public function listarUsuarios(){
+          $arrRespuesta = array();
+        $sql = $this->conexion->query("SELECT * FROM usuarios");
+        while ($objeto = $sql->fetch_object()) {
+            array_push($arrRespuesta, $objeto);
+        }
+        return $arrRespuesta;
+    }
+    public function registrarUsuario($dni, $apellidos_nombres,$correo, $telefono,$password)
     {
         $sql = $this->conexion->query("INSERT INTO usuarios (dni, nombres_apellidos, correo, telefono, password) VALUES ('$dni','$apellidos_nombres','$correo','$telefono','$password')");
         if ($sql) {
@@ -31,10 +39,12 @@ class UsuarioModel
         return $sql;
     }
 
-    public function updateResetPassword($id,$token,$estado){
-        $sql = $this->conexion->query("UPDATE usuarios SET token_password ='$token', reset_password='$estado' WHERE id='$id'");
+
+    public function UpdateResetPassword($id, $token,  $estado){
+        $sql = $this->conexion->query("UPDATE usuarios SET token_password = '$token', reset_password='$estado' WHERE id = '$id'");
         return $sql;
     }
+
 
     public function buscarUsuarioById($id)
     {
@@ -60,6 +70,7 @@ class UsuarioModel
         $sql = $sql->fetch_object();
         return $sql;
     }
+
     public function buscarUsuarioByDniCorreo($dni, $correo)
     {
         $sql = $this->conexion->query("SELECT * FROM usuarios WHERE dni='$dni' AND correo='$correo'");

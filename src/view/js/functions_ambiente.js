@@ -283,4 +283,3 @@ async function actualizarAmbiente(id) {
         console.log("Error al actualizar periodo" + e);
     }
 }
-

@@ -29,7 +29,7 @@
                         <div class="col-9">
                             <input type="text" class="form-control" id="telefono" name="telefono">
                         </div>
-                    </div>         
+                    </div>      
                     <div class="form-group mb-0 justify-content-end row text-center">
                         <div class="col-12">
                         <a href="<?php echo BASE_URL;?>usuarios" class="btn btn-light waves-effect waves-light">Regresar</a>
