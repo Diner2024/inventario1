@@ -32,10 +32,8 @@ public function Header() {
     $y2 = $y1 + 1.2; // Posición Y, un poco debajo de la primera línea
     $this->SetFillColor(51, 116, 194); // Color #3374C2 en RGB
     $this->Rect($x, $y2, $lineWidth, 1, 'F');
-    // --- TEXTO "ANEXO - 4 -" ---
-    $this->SetY($y2 + 3); // Posicionamos el cursor debajo de las líneas
-    $this->SetFont('helvetica', 'B', 12);
-    $this->Cell(0, 10, 'ANEXO - 4 -', 0, 1, 'C');
+
+
     // --- LOGO DERECHO ---
     $this->Image($image_path_goba, 170, 8, 25, 0, 'JPG', '', 'T', false, 300, 'R', false, false, 0, false, false, false);
 }
@@ -154,14 +152,6 @@ if ($ruta[1] == "imprInstituciones") {
 <body>
 
   <h2>REPORTE DE INSTITUCIONES</h2>
-
-  <div class="info">
-    <div><b>ENTIDAD:</b> DIRECCIÓN REGIONAL DE EDUCACIÓN - AYACUCHO</div>
-    <div><b>ÁREA:</b> OFICINA DE ADMINISTRACIÓN</div>
-    <div><b>ORIGEN:</b>N/A</div>
-    <div><b>DESTINO:</b>N/A</div>
-    <div><b>MOTIVO(*):</b>____________</div>
-  </div>
 
   <table>
     <thead>
@@ -322,14 +312,6 @@ if($ruta[1] == "imprAmbientes"){
 
   <h2>REPORTE DE AMBIENTES</h2>
 
-  <div class="info">
-    <div><b>ENTIDAD:</b> DIRECCIÓN REGIONAL DE EDUCACIÓN - AYACUCHO</div>
-    <div><b>ÁREA:</b> OFICINA DE ADMINISTRACIÓN</div>
-    <div><b>ORIGEN:</b>N/A</div>
-    <div><b>DESTINO:</b>N/A</div>
-    <div><b>MOTIVO(*):</b>____________</div>
-  </div>
-
   <table>
     <thead>
       <tr>
@@ -480,14 +462,6 @@ if($ruta[1] == "imprBienes"){
 <body>
 
   <h2>REPORTE DE BIENES</h2>
-
-  <div class="info">
-    <div><b>ENTIDAD:</b> DIRECCIÓN REGIONAL DE EDUCACIÓN - AYACUCHO</div>
-    <div><b>ÁREA:</b> OFICINA DE ADMINISTRACIÓN</div>
-    <div><b>ORIGEN:</b>N/A</div>
-    <div><b>DESTINO:</b>N/A</div>
-    <div><b>MOTIVO(*):</b>____________</div>
-  </div>
 
   <table>
     <thead>
@@ -648,14 +622,6 @@ if ($ruta[1] == "imprMovimientos") {
 
   <h2>REPORTE DE MOVIMIENTOS</h2>
 
-  <div class="info">
-    <div><b>ENTIDAD:</b> DIRECCIÓN REGIONAL DE EDUCACIÓN - AYACUCHO</div>
-    <div><b>ÁREA:</b> OFICINA DE ADMINISTRACIÓN</div>
-    <div><b>ORIGEN:</b>N/A</div>
-    <div><b>DESTINO:</b>N/A</div>
-    <div><b>MOTIVO(*):</b>____________</div>
-  </div>
-
   <table>
     <thead>
       <tr>
@@ -808,13 +774,6 @@ if ($ruta[1] == "imprUsuarios") {
 
   <h2>REPORTE DE USUARIOS</h2>
 
-  <div class="info">
-    <div><b>ENTIDAD:</b> DIRECCIÓN REGIONAL DE EDUCACIÓN - AYACUCHO</div>
-    <div><b>ÁREA:</b> OFICINA DE ADMINISTRACIÓN</div>
-    <div><b>ORIGEN:</b>N/A</div>
-    <div><b>DESTINO:</b>N/A</div>
-    <div><b>MOTIVO(*):</b>____________</div>
-  </div>
 
   <table>
     <thead>
@@ -876,7 +835,7 @@ if ($ruta[1] == "imprUsuarios") {
 
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Diner garcia');
+        $pdf->SetAuthor('Juan Elias');
         $pdf->SetTitle('REPORTE DE USUARIOS');
         $pdf->SetSubject('TCPDF Tutorial');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
@@ -885,7 +844,6 @@ if ($ruta[1] == "imprUsuarios") {
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
         $pdf->AddPage();
-
         $pdf->writeHTML($contenido_pdf, true, false,true,false,'');
         $pdf->Output('REPORTE_USUARIOS.pdf', 'I');
         exit;
@@ -894,4 +852,3 @@ if ($ruta[1] == "imprUsuarios") {
 }
 
 ?>
-

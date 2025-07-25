@@ -89,7 +89,7 @@ if ($tipo == "listar_movimientos_ordenados_tabla") {
                 $arr_contenido[$i]->fecha_registro = $arr_Ambiente[$i]->fecha_registro;
                 $arr_contenido[$i]->descripcion = $arr_Ambiente[$i]->descripcion;
                 $opciones = '<button type="button" title="Ver" class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target=".modal_ver' . $arr_Ambiente[$i]->id . '"><i class="fa fa-eye"></i></button>
-                <a href="' . BASE_URL . 'imprimir-movimiento/' . $arr_Ambiente[$i]->id . '" class="btn btn-outline-primary"><i class="fa fa-print"></i></a>
+                <a href="'.BASE_URL.'imprimir-movimiento/'.$arr_Ambiente[$i]->id.'" class="btn btn-rounded btn-danger"><i class="fa fa-print"></i></a>
                 ';
                 $arr_contenido[$i]->options = $opciones;
             }
@@ -153,6 +153,7 @@ if ($tipo == "registrar") {
     }
     echo json_encode($arr_Respuesta);
 }
+
 if ($tipo == "actualizar") {
     $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
     if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
@@ -205,6 +206,7 @@ if ($tipo == "datos_registro") {
     }
     echo json_encode($arr_Respuesta);
 }
+
 if($tipo == "buscar_movimiento_id"){
    $arr_Respuesta = array('status'=>false, 'msg'=>'error');
  if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
@@ -238,4 +240,36 @@ if($tipo == "buscar_movimiento_id"){
     $arr_Respuesta['msg'] = 'correcto';
  }
  echo json_encode($arr_Respuesta);
+}
+
+if($tipo == "ListarMovimientos"){
+    $arr_Respuesta = array('status' => false, 'msg' => 'Error_Sesion');
+    if ($objSesion->verificar_sesion_si_activa($id_sesion, $token)) {
+
+        $arr_movimiento = $objMovimiento->listarMovimientos();
+        $arr_contenido = [];
+        if (!empty($arr_movimiento)) {
+            // recorremos el array para agregar las opciones de las categorias
+            for ($i = 0; $i < count($arr_movimiento); $i++) {
+                $origen = $objAmbiente->buscarAmbienteById($arr_movimiento[$i]->id_ambiente_origen);
+                $destino = $objAmbiente->buscarAmbienteById($arr_movimiento[$i]->id_ambiente_destino);
+                $usuario = $objUsuario->buscarUsuarioById($arr_movimiento[$i]->id_usuario_registro);
+                $institucion = $objInstitucion->buscarInstitucionById($arr_movimiento[$i]->id_ies);
+                // definimos el elemento como objeto
+                $arr_contenido[$i] = (object) [];
+                // agregamos solo la informacion que se desea enviar a la vista
+                $arr_contenido[$i]->id = $arr_movimiento[$i]->id;
+                $arr_contenido[$i]->origenname = $origen->detalle;
+                $arr_contenido[$i]->destinoname = $destino->detalle;
+                $arr_contenido[$i]->usuarioname = $usuario->nombres_apellidos;
+                $arr_contenido[$i]->fecha = $arr_movimiento[$i]->fecha_registro;
+                $arr_contenido[$i]->descripcion = $arr_movimiento[$i]->descripcion;
+                $arr_contenido[$i]->institucionname = $institucion->nombre;
+            }
+            $arr_Respuesta['status'] = true;
+            $arr_Respuesta['msg']= 'correcto';
+            $arr_Respuesta['movimientos'] = $arr_contenido;
+        }
+    }
+    echo json_encode($arr_Respuesta);
 }

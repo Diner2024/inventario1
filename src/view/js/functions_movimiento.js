@@ -524,4 +524,3 @@ async function actualizarMovimiento(id) {
         console.log("Error al actualizar periodo" + e);
     }
 }
-
