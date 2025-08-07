@@ -7,7 +7,7 @@
   
 $curl = curl_init(); //inicia la sesión cURL
     curl_setopt_array($curl, array(
-        CURLOPT_URL => BASE_URL_SERVER."src/control/Bien.php?tipo=ObtenerBienes&sesion=".$_SESSION['sesion_id']."&token=".$_SESSION['sesion_token'], //url a la que se conecta
+        CURLOPT_URL => BASE_URL_SERVER."src/control/Institucion.php?tipo=listar&sesion=".$_SESSION['sesion_id']."&token=".$_SESSION['sesion_token'], //url a la que se conecta
         CURLOPT_RETURNTRANSFER => true, //devuelve el resultado como una cadena del tipo curl_exec
         CURLOPT_FOLLOWLOCATION => true, //sigue el encabezado que le envíe el servidor
         CURLOPT_ENCODING => "", // permite decodificar la respuesta y puede ser"identity", "deflate", y "gzip", si está vacío recibe todos los disponibles.
@@ -31,14 +31,14 @@ $curl = curl_init(); //inicia la sesión cURL
     } else {
        $respuesta = json_decode($response);
 
-       $bienes = $respuesta->bienes;
+       $ambiente = $respuesta->contenido;
 
 
        // Crear el Excel
             $spreadsheet = new Spreadsheet();
             $spreadsheet->getProperties()->setCreator("Diner")->setLastModifiedBy("yo")->setTitle("ReporteBienes")->setDescription("yo");
             $activeWorkSheet = $spreadsheet->getActiveSheet();
-            $activeWorkSheet->setTitle("Bienes");  
+            $activeWorkSheet->setTitle("Instituciones");  
 
             // Estilo en negrita
             $styleArray = [
@@ -51,9 +51,7 @@ $curl = curl_init(); //inicia la sesión cURL
             $activeWorkSheet->getStyle('A1:R1')->applyFromArray($styleArray);
             
             $headers = [
-                'ID', 'Id ingreso bienes', 'id ambiente', 'cod patrimonial', 'denominacion', 'marca', 'Modelo', 'tipo', 'Color',
-                'serie', 'dimensiones', 'valor', 'situacion', 'estado conservacion', 'observaciones',
-                'fecha registro', 'usuario registro', 'estado'
+                'ID', 'BENEFICIARIO', 'COD_MODULAR', 'RUC', 'NOMBRE'
              ];
 
             // Asignar cabeceras en la fila 1
@@ -64,26 +62,13 @@ $curl = curl_init(); //inicia la sesión cURL
 
            // Llenar los datos
             $row = 2;
-            foreach ($bienes as $bien) {
+            foreach ($ambiente as $amb) {
                 $atributos = [
-                    $bien->id ?? '',
-                    $bien->id_ingreso_bienes ?? '',
-                    $bien->id_ambiente ?? '',
-                    $bien->cod_patrimonial ?? '',
-                    $bien->denominacion ?? '',
-                    $bien->marca ?? '',
-                    $bien->modelo ?? '',
-                    $bien->tipo ?? '',
-                    $bien->color ?? '',
-                    $bien->serie ?? '',
-                    $bien->dimensiones ?? '',
-                    $bien->valor ?? '',
-                    $bien->situacion ?? '',
-                    $bien->estado_conservacion ?? '',
-                    $bien->observaciones ?? '',
-                    $bien->fecha_registro ?? '',
-                    $bien->usuario_registro ?? '',
-                    $bien->estado ?? ''
+                    $amb->id ?? '',
+                    $amb->beneficiario ?? '',
+                    $amb->cod_modular ?? '',
+                    $amb->ruc ?? '',
+                    $amb->nombre ?? ''
                 ];
 
                 foreach ($atributos as $i => $valor) {
@@ -97,7 +82,7 @@ $curl = curl_init(); //inicia la sesión cURL
 
 ob_clean();
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment; filename="reporte_bienes.xlsx"');
+            header('Content-Disposition: attachment; filename="reporteInstituciones.xlsx"');
             header('Cache-Control: max-age=0');
 
             $writer = new Xlsx($spreadsheet);

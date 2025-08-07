@@ -1,14 +1,11 @@
 <?php 
 $ruta = explode("/", $_GET['views']);
 
-if (!isset($ruta[1]) || $ruta[1] == "") {
-    header("location: " . BASE_URL. "404");
-}
 require_once('./vendor/tecnickcom/tcpdf/tcpdf.php');
 class MYPDF extends TCPDF {
 public function Header() {
-    $image_path_dre = __DIR__ . '/images/gobayacucho.jpg → /images/gobayacucho.png';
-    $image_path_goba = __DIR__ . '/images/dreaya.jpg → /images/dreaya.png';
+    $image_path_dre =__DIR__.'/images/ayacucho.jpeg';
+    $image_path_goba = __DIR__.'/images/drea.jpeg';
     // --- LOGO IZQUIERDO ---
     $this->Image($image_path_dre, 15, 8, 25, 0, 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
     // --- TEXTOS DEL CENTRO ---
@@ -35,7 +32,7 @@ public function Header() {
 
 
     // --- LOGO DERECHO ---
-    $this->Image($image_path_goba, 170, 8, 25, 0, 'JPG', '', 'T', false, 300, 'R', false, false, 0, false, false, false);
+    $this->Image($image_path_goba, 170, 8, 25, 0, 'JPEG', '', 'T', false, 300, 'R', false, false, 0, false, false, false);
 }
 
 public function Footer() {
@@ -205,8 +202,8 @@ if ($ruta[1] == "imprInstituciones") {
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Juan Elias');
-        $pdf->SetTitle('REPORTE DE INSTITUCIONES');
+        $pdf->SetAuthor('Diner');
+        $pdf->SetTitle('INSTITUCIONES');
         $pdf->SetSubject('TCPDF Tutorial');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
         // set margins
@@ -364,7 +361,7 @@ if($ruta[1] == "imprAmbientes"){
 
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Juan Elias');
+        $pdf->SetAuthor('Diner');
         $pdf->SetTitle('REPORTE DE AMBIENTES');
         $pdf->SetSubject('TCPDF Tutorial');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
@@ -381,10 +378,10 @@ if($ruta[1] == "imprAmbientes"){
     }
 }
 //imprimir bienes
-if($ruta[1] == "imprBienes"){
+if($ruta[1] == "imprbienes"){
      $curl = curl_init(); 
         curl_setopt_array($curl, array(
-        CURLOPT_URL => BASE_URL_SERVER."src/control/Bien.php?tipo=ObtenerTodosBienes&sesion=".$_SESSION['sesion_id']."&token=".$_SESSION['sesion_token'],
+        CURLOPT_URL => BASE_URL_SERVER."src/control/Bien.php?tipo=ObtenerBienes&sesion=".$_SESSION['sesion_id']."&token=".$_SESSION['sesion_token'],
         CURLOPT_RETURNTRANSFER => true, 
         CURLOPT_FOLLOWLOCATION => true, 
         CURLOPT_ENCODING => "", 
@@ -523,8 +520,8 @@ if($ruta[1] == "imprBienes"){
 
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Juan Elias');
-        $pdf->SetTitle('REPORTE DE BIENES');
+        $pdf->SetAuthor('Diner');
+        $pdf->SetTitle('BIENES');
         $pdf->SetSubject('TCPDF Tutorial');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
         $pdf->SetMargins(PDF_MARGIN_LEFT, 48, PDF_MARGIN_RIGHT);
@@ -676,7 +673,7 @@ if ($ruta[1] == "imprMovimientos") {
 
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Juan Elias');
+        $pdf->SetAuthor('Diner');
         $pdf->SetTitle('REPORTE DE MOVIMIENTOS');
         $pdf->SetSubject('TCPDF Tutorial');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
@@ -835,7 +832,7 @@ if ($ruta[1] == "imprUsuarios") {
 
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Juan Elias');
+        $pdf->SetAuthor(' Diner');
         $pdf->SetTitle('REPORTE DE USUARIOS');
         $pdf->SetSubject('TCPDF Tutorial');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
